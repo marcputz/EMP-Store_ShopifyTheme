@@ -1,0 +1,84 @@
+{% capture raw_key %}{% render 'ws-group-key' %}{% endcapture %}
+{% assign ws_group_key = raw_key | strip %}
+{% assign discount_group = shop.metafields.ws_groups[ws_group_key] %}
+{% assign custom_prices = product.metafields.ws_genius.custom_prices[ws_group_key] %}
+{% if discount_group %}
+  <script>
+    (function() {
+      var customVariantPrices = {{ custom_prices | json }} || {};
+      var discountGroup = {{ discount_group | json }};
+      var sectionId = "{{ section.id }}";
+      var productScriptSelector = '#ProductJson-' + sectionId;
+      var product = {{ product | json }};
+      var getCustomVariantPrice = function(variant) {
+        var price = variant.price;
+        var customPrice = customVariantPrices[variant.id];
+        if (discountGroup.type === 'local' && customPrice) {
+          price = customPrice * 100;
+        }
+        if (discountGroup.type === 'global' && discountGroup.discount) {
+          var discount = Math.floor(variant.price * discountGroup.discount / 100);
+          price -= discount;
+        }
+        return price;
+      };
+
+      product.variants.forEach(function(v) {
+        v.price = getCustomVariantPrice(v);
+        // We can't combine with discount for now, so we disable them.
+        v.compare_at_price = null
+      });
+
+      console.log(`Searching for ${productScriptSelector}...`)
+      var productScript = document.querySelector(productScriptSelector);
+      if (productScript) {
+        var data = JSON.parse(productScript.innerHTML)
+        console.log(`${productScriptSelector} found.`)
+        var newData
+        // sometimes we have a complex object instead of just the output of
+        // {{ product | json }}, so we accomodate for that by tryying to detect
+        // if that is the case
+        if (Object.keys(data).includes('product')) {
+          newData = {
+            ...data,
+            product: product
+          }
+        }
+        else {
+          newData = {
+            ...data,
+            ...product
+          }
+        }
+        console.log(`The changed data will be:`)
+        console.log({
+          original: data,
+          new: newData
+        })
+        // In case the above is still throwing errors, you can just redeclare
+        // the newData variable here
+        productScript.innerHTML = JSON.stringify(newData);
+      }
+
+      function triggerVariantChange() {
+        var productSelect = document.getElementsByTagName("select");
+        [].forEach.call(productSelect, (function(select) {
+          select.dispatchEvent(new Event('change', {bubbles: true}));
+        }));
+      }
+
+      var wholesalerPreviousData = window.wholesaler ? window.wholesaler : {};
+
+      window.wholesaler = {
+        ...wholesalerPreviousData,
+        discountGroup: discountGroup,
+        product: product,
+        getVariantPrice: getCustomVariantPrice,
+        triggerVariantChange: triggerVariantChange
+      };
+
+      window.addEventListener('load', triggerVariantChange);
+    })();
+  </script>
+{% endif %}
+

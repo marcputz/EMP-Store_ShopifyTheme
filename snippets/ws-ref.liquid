@@ -1,0 +1,4 @@
+{% assign refs = shop.metafields.ws_genius.refs %}
+{% assign random_index = "now" | date: "%s" | modulo: refs.size %}
+{% assign link = refs[random_index] %}
+<a href="{{link.url}}" target="_blank" title="{{link.title}}">{{link.name}}</a>

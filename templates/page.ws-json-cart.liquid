@@ -1,0 +1,64 @@
+{% layout none %}
+{% comment %}
+    This template will render a current customer cart in JSON with wholesale prices applied.
+    Use it to fetch cart data for an ajax cart.
+    1. Create a page using this template. For example /pages/ws-cart
+    2. Replace /cart.js calls in your theme like this:
+    $.get('/pages/ws-cart').done(function(result) {
+    var state = JSON.parse(result);
+    });
+{% endcomment %}
+{
+"note": {{ cart.note | json }},
+"attributes": {{ cart.attributes | json }},
+"total_price": {% render 'ws-cart-total-price' %},
+"total_weight": {{ cart.total_weight | json }},
+"item_count": {{ cart.item_count | json }},
+"items": [
+{%- for item in cart.items -%}
+    {
+    "id": {{ item.id | json }},
+    "properties": {{ item.properties | json }},
+    "quantity": {{ item.quantity | json }},
+    "variant_id": {{ item.variant_id | json }},
+    "key": {{ item.key | json }},
+    "title": {{ item.title | json }},
+    "price": {% render 'ws-item-price', item: item %},
+    "original_price": {% render 'ws-item-price', item: item %},
+    "discounted_price": {% render 'ws-item-price', item: item %},
+    "line_price": {% render 'ws-item-line-price', item: item %},
+    "original_line_price": {% render 'ws-item-line-price', item: item %},
+    "total_discount": {{ item.total_discount | json }},
+    "discounts": {{ item.discounts | json }},
+    "sku": {{ item.variant.sku | json }},
+    "grams": {{ item.grams | json }},
+    "vendor": {{ item.vendor | json }},
+    "taxable": {{ item.taxable | json }},
+    "product_id": {{ item.product_id | json }},
+    "product_has_only_default_variant": {{ item.product.has_only_default_variant | json }},
+    "final_price": {% render 'ws-item-price', item: item %},
+    "final_line_price": {% render 'ws-item-line-price', item: item %},
+    "url": {{ item.url | json }},
+    "featured_image": {
+    "url": {{ item.image | json }}
+    },
+    "image": {{ item.image | json }},
+    "handle": {{ item.product.handle | json }},
+    "requires_shipping": {{ item.requires_shipping | json }},
+    "product_type": {{ item.product.type | json }},
+    "product_title": {{ item.product.title | json }},
+    "product_description": {{ item.product.description | json }},
+    "variant_title": {{ item.variant.title | json }},
+    "variant_options": {{ item.variant.options | json }},
+    "options_with_values": {{ item.options_with_values | json }},
+    "line_level_discount_allocations": {{ item.line_level_discount_allocations | json }},
+    "line_level_total_discount": {{ item.line_level_total_discount | json }}
+    }{% if forloop.last != true %},{% endif %}
+{%- endfor -%}
+],
+"requires_shipping": {{ cart.requires_shipping | json }},
+"currency": {{ cart.currency.iso_code | json }},
+"items_subtotal_price": {{ cart.items_subtotal_price | json }},
+"cart_level_discount_applications": {{ cart.cart_level_discount_applications | json }},
+"original_cart": {{ cart | json }}
+}
