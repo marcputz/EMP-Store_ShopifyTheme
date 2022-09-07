@@ -8,5 +8,10 @@
     "next": "Next",
     "close": "Close",
     "open": "Open"
+  },
+
+  "accessibility": {
+    "skip_to_text": "Jump to Content",
+    "refresh_page": "Refresh Page"
   }
 }
