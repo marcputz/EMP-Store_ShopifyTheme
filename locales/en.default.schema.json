@@ -2,7 +2,7 @@
   "settings_schema": {
 
     "colors": {
-      "name": "Farben",
+      "name": "Colors",
       "settings": {
 
         "header_accent-colors": "Accent Colors",
