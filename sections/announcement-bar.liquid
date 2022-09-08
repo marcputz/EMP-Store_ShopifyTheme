@@ -1,12 +1,30 @@
 {%- for block in section.blocks -%}
+
+  {% style %}
+    .block-{{ block.id }} {
+      background-color: rgb({{ block.settings.background-color.red }}, {{ block.settings.background-color.green }}, {{ block.settings.background-color.blue }});
+      color: rgb({{ block.settings.text-color.red }}, {{ block.settings.text-color.green }}, {{ block.settings.text-color.blue }});
+    }
+
+    .block-{{ block.id }} a {
+      color: rgb({{ block.settings.text-color.red }}, {{ block.settings.text-color.green }}, {{ block.settings.text-color.blue }});
+      text-decoration: none;
+    }
+
+    .block-{{ block.id }} a:hover {
+      text-decoration: underline;
+    }
+    .block-{{ block.id }} a:active {}
+  {% endstyle %}
+
   {%- case block.type -%}
     {%- when 'announcement' -%}
-      <div class="announcement-bar color-{{ block.settings.color_scheme }} gradient" role="region" aria-label="{{ 'sections.header.announcement' | t }}" {{ block.shopify_attributes }}>
+      <div class="announcement-bar block-{{ block.id }}" role="region" {{ block.shopify_attributes }}>
         {%- if block.settings.text != blank -%}
           {%- if block.settings.link != blank -%}
-            <a href="{{ block.settings.link }}" class="announcement-bar__link link link--text focus-inset animate-arrow">
+            <a href="{{ block.settings.link }}" class="link animate-arrow">
           {%- endif -%}
-              <p class="announcement-bar__message h5">
+              <p class="announcement-bar-message">
                 {{ block.settings.text | escape }}
                 {%- if block.settings.link != blank -%}
                   {% render 'icon-arrow' %}
@@ -19,6 +37,41 @@
       </div>
   {%- endcase -%}
 {%- endfor -%}
+
+{% style %}
+  .announcement-bar {
+    padding: 0.8rem;
+
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+
+  .announcement-bar a {
+    width: 100%;
+  }
+
+  .announcement-bar-message {
+    display: inline-flex;
+    flex-direction: row;
+
+    font-size: 1.2rem;
+
+    padding: 0;
+    margin: 0;
+    border: none;
+  }
+
+  /* arrow icon */
+  .announcement-bar-message svg {
+    margin-top: 0.2rem;
+    margin-left: 0.7rem;
+    height: 1.3rem;
+  }
+{% endstyle %}
 
 {% schema %}
 {
@@ -33,40 +86,26 @@
           "type": "text",
           "id": "text",
           "default": "Welcome to our store",
-          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text"
         },
         {
-          "type": "select",
-          "id": "color_scheme",
-          "options": [
-            {
-              "value": "accent-1",
-              "label": "t:sections.all.colors.accent_1.label"
-            },
-            {
-              "value": "accent-2",
-              "label": "t:sections.all.colors.accent_2.label"
-            },
-            {
-              "value": "background-1",
-              "label": "t:sections.all.colors.background_1.label"
-            },
-            {
-              "value": "background-2",
-              "label": "t:sections.all.colors.background_2.label"
-            },
-            {
-              "value": "inverse",
-              "label": "t:sections.all.colors.inverse.label"
-            }
-          ],
-          "default": "accent-1",
-          "label": "t:sections.all.colors.label"
+          "type": "color",
+          "id": "background-color",
+          "default": "#202020",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.background-color.label",
+          "info": "t:sections.announcement-bar.blocks.announcement.settings.background-color.info"
+        },
+        {
+          "type": "color",
+          "id": "text-color",
+          "default": "#EAEAEA",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text-color.label",
+          "info": "t:sections.announcement-bar.blocks.announcement.settings.text-color.info"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label"
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.link"
         }
       ]
     }

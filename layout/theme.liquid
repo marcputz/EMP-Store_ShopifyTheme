@@ -147,21 +147,28 @@
     </script>
   </head>
 
-  <body>
+  <body class="page">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ "accessibility.skip_to_text" | t }}
     </a>
 
-    {% section 'announcement-bar' %}
+    <div class="page-annoucement-bar">
+      {% section 'announcement-bar' %}
+    </div>
 
-    {% section 'header' %}
-    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+    <div class="page-header">
+      {% section 'header' %}
+    </div>
 
-      {{ content_for_layout }}
+    <div class="page-body">
+      <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+        {{ content_for_layout }}
+      </main>
+    </div>
 
-    </main>
-
-    {% section 'footer' %}
+    <div class="page-footer">
+      {% section 'footer' %}
+    </div>
 
     <ul hidden>
       <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
