@@ -1,0 +1,64 @@
+/* GENERAL CSS STYLES */
+
+.hidden {
+    display: none !important;
+  }
+  
+.visually-hidden {
+    position: absolute !important;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+    word-wrap: normal !important;
+}
+
+.link {
+    text-decoration: none;
+    color: rgb(var(--color-text));
+}
+
+
+/* arrow animation */
+
+.animate-arrow .icon-arrow path {
+    transform: translateX(-0.25rem);
+    transition: transform var(--duration-short) ease;
+}
+
+.animate-arrow:hover .icon-arrow path {
+    transform: translateX(-0.05rem);
+}
+
+
+/* USED IN theme.liquid */
+
+body, .page {
+    background-color: #FFFFFF;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    border: none;
+
+    display: block;
+}
+
+.page-body {
+    
+}
+
+.page-header {
+
+}
+
+.page-footer {
+
+}
+
+.page-annoucement-bar {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    border: none;
+}

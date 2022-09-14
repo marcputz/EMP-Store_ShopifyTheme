@@ -101,5 +101,28 @@
       }
     }
 
+  },
+
+  "sections": {
+    "announcement-bar": {
+      "name": "Announcement Bar",
+      "blocks": {
+        "announcement": {
+          "name": "Annoucement",
+          "settings": {
+            "text": "Text",
+            "background-color": {
+              "label": "Background Color",
+              "info": "Color used for the annoucement's background"
+            },
+            "text-color": {
+              "label": "Text Color",
+              "info": "Color used for the annoucement's text"
+            },
+            "link": "Link to redirect"
+          }
+        }
+      }
+    }
   }
 }
